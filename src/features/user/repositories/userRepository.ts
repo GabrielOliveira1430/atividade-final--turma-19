@@ -1,5 +1,11 @@
 import { prisma } from '../../../shared/prisma';
 
+interface UpdateUserDTO {
+  name?: string;
+  email?: string;
+  password?: string;
+}
+
 export class UserRepository {
   async create(data: {
     name: string;
@@ -56,6 +62,25 @@ export class UserRepository {
         loginAttempts: 0,
         lockedUntil: null,
       },
+    });
+  }
+
+  // 🔄 ATUALIZA USUÁRIO
+  async update(id: string, data: UpdateUserDTO) {
+    return prisma.user.update({
+      where: { id },
+      data: {
+        ...(data.name && { name: data.name }),
+        ...(data.email && { email: data.email.trim().toLowerCase() }),
+        ...(data.password && { password: data.password }),
+      },
+    });
+  }
+
+  // 🗑️ REMOVE USUÁRIO
+  async delete(id: string) {
+    return prisma.user.delete({
+      where: { id },
     });
   }
 }
