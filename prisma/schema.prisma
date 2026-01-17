@@ -33,3 +33,12 @@ model RefreshToken {
 
   @@map("refresh_tokens")
 }
+ 
+ model Aluno {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("alunos")
+}
